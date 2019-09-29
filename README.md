@@ -10,6 +10,8 @@ First run `yarn install`.
 
 Then run `yarn dev` to get the dev server up.
 
+Also this uses the basic backend from this repo: [https://github.com/djtorel/express-apollo-mongodb](https://github.com/djtorel/express-apollo-mongodb)
+
 ---
 
 ## Notes
@@ -106,4 +108,135 @@ Create a folder named `styles` and then create an `index.css` file with these co
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+```
+
+---
+
+## Apollo Config
+
+### Utility files
+
+### Create a `./lib` folder
+
+### Create an `init-apollo.js` file in `./lib` with the following contents
+
+```javascript
+import { ApolloClient, InMemoryCache, HttpLink } from 'apollo-boost';
+import fetch from 'isomorphic-unfetch';
+
+let apolloClient = null;
+
+function create(initialState) {
+  // Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
+  const isBrowser = typeof window !== 'undefined';
+  return new ApolloClient({
+    connectToDevTools: isBrowser,
+    ssrMode: !isBrowser, // Disables forceFetch on the server (so queries are only run once)
+    link: new HttpLink({
+      uri: 'http://localhost:4000/graphql', // Server URL (must be absolute)
+      credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
+      // Use fetch() polyfill on the server
+      fetch: !isBrowser && fetch,
+    }),
+    cache: new InMemoryCache().restore(initialState || {}),
+  });
+}
+
+export default function initApollo(initialState) {
+  // Make sure to create a new client for every server-side request so that data
+  // isn't shared between connections (which would be bad)
+  if (typeof window === 'undefined') {
+    return create(initialState);
+  }
+
+  // Reuse client on the client-side
+  if (!apolloClient) {
+    apolloClient = create(initialState);
+  }
+
+  return apolloClient;
+}
+```
+
+### Create a `with-apollo-client.js` file in `./lib` with the following contents
+
+```javascript
+import React from 'react';
+import initApollo from './init-apollo';
+import Head from 'next/head';
+import { getDataFromTree } from '@apollo/react-ssr';
+
+export default App => {
+  return class Apollo extends React.Component {
+    static displayName = 'withApollo(App)';
+    static async getInitialProps(ctx) {
+      const { AppTree } = ctx;
+
+      let appProps = {};
+      if (App.getInitialProps) {
+        appProps = await App.getInitialProps(ctx);
+      }
+
+      // Run all GraphQL queries in the component tree
+      // and extract the resulting data
+      const apollo = initApollo();
+      if (typeof window === 'undefined') {
+        try {
+          // Run all GraphQL queries
+          await getDataFromTree(
+            <AppTree {...appProps} apolloClient={apollo} />
+          );
+        } catch (error) {
+          // Prevent Apollo Client GraphQL errors from crashing SSR.
+          // Handle them in components via the data.error prop:
+          // https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-query-data-error
+          console.error('Error while running `getDataFromTree`', error);
+        }
+
+        // getDataFromTree does not call componentWillUnmount
+        // head side effect therefore need to be cleared manually
+        Head.rewind();
+      }
+
+      // Extract query data from the Apollo store
+      const apolloState = apollo.cache.extract();
+
+      return {
+        ...appProps,
+        apolloState,
+      };
+    }
+
+    constructor(props) {
+      super(props);
+      this.apolloClient = initApollo(props.apolloState);
+    }
+
+    render() {
+      return <App apolloClient={this.apolloClient} {...this.props} />;
+    }
+  };
+};
+```
+
+### Create a `_app.js` file in the `./pages` folder with the following contents
+
+```javascript
+import App from 'next/app';
+import React from 'react';
+import { ApolloProvider } from '@apollo/react-hooks';
+import withApolloClient from '../lib/with-apollo-client';
+
+class MyApp extends App {
+  render() {
+    const { Component, pageProps, apolloClient } = this.props;
+    return (
+      <ApolloProvider client={apolloClient}>
+        <Component {...pageProps} />
+      </ApolloProvider>
+    );
+  }
+}
+
+export default withApolloClient(MyApp);
 ```
