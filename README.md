@@ -18,15 +18,11 @@ Then run `yarn dev` to get the dev server up.
 
 ### Dependencies
 
-```bash
-yarn add next react react-dom next-apollo graphql apollo-boost @apollo/react-hooks @apollo/react-ssr @zeit/next-css
-```
+`yarn add next react react-dom graphql apollo-boost @apollo/react-hooks @apollo/react-ssr @zeit/next-css isomorphic-unfetch`
 
 ### Dev Dependencies
 
-```bash
-yarn add --dev tailwindcss postcss-preset-env eslint-plugin-react@latest eslint@latest prettier
-```
+`yarn add --dev tailwindcss postcss-preset-env eslint-plugin-react@latest eslint@latest prettier`
 
 ## Initialize some dev stuff (or copy files given)
 
