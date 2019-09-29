@@ -14,6 +14,18 @@ Also this uses the basic backend from this repo: [https://github.com/djtorel/exp
 
 ---
 
+## Links
+
+[NextJS Docs](https://nextjs.org/docs)
+
+[Tailwind CSS Docs](https://tailwindcss.com/docs/installation)
+
+[NextJS With Apollo example](https://github.com/zeit/next.js/tree/master/examples/with-apollo)
+
+[Apollo Docs](https://www.apollographql.com/docs/)
+
+---
+
 ## Notes
 
 ## Initial Setup
@@ -219,7 +231,7 @@ export default App => {
 };
 ```
 
-### Wrap the base App with AppollowProvider
+### Wrap the base App with AppolloProvider
 
 Create a `_app.js` file in the `./pages` folder with the following contents
 
