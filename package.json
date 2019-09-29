@@ -27,7 +27,6 @@
     "apollo-boost": "^0.4.4",
     "graphql": "^14.5.8",
     "next": "^9.0.7",
-    "next-apollo": "^3.1.5",
     "react": "^16.10.1",
     "react-dom": "^16.10.1"
   },
