@@ -1,9 +1,10 @@
 import '../styles/index.css';
 import App from '../components/App';
+import CatList from '../components/CatList';
 
 const Home = () => (
   <App>
-    <div></div>
+    <CatList />
   </App>
 );
 
