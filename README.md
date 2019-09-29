@@ -219,6 +219,8 @@ export default App => {
 };
 ```
 
+### Wrap the base App with AppollowProvider
+
 Create a `_app.js` file in the `./pages` folder with the following contents
 
 ```javascript
