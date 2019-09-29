@@ -1,0 +1,41 @@
+{
+  "name": "labs-stack-fe-demo",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "dependencies": {
+    "@apollo/react-hooks": "^3.1.1",
+    "@apollo/react-ssr": "^3.1.1",
+    "@zeit/next-css": "^1.0.1",
+    "apollo-boost": "^0.4.4",
+    "graphql": "^14.5.8",
+    "next": "^9.0.7",
+    "next-apollo": "^3.1.5",
+    "react": "^16.10.1",
+    "react-dom": "^16.10.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.4.0",
+    "eslint-plugin-react": "^7.14.3",
+    "postcss-preset-env": "^6.7.0",
+    "prettier": "^1.18.2",
+    "tailwindcss": "^1.1.2"
+  }
+}
