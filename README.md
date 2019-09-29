@@ -116,9 +116,9 @@ Create a folder named `styles` and then create an `index.css` file with these co
 
 ### Utility files
 
-### Create a `./lib` folder
+Create a `./lib` folder
 
-### Create an `init-apollo.js` file in `./lib` with the following contents
+Create an `init-apollo.js` file in `./lib` with the following contents
 
 ```javascript
 import { ApolloClient, InMemoryCache, HttpLink } from 'apollo-boost';
@@ -158,7 +158,7 @@ export default function initApollo(initialState) {
 }
 ```
 
-### Create a `with-apollo-client.js` file in `./lib` with the following contents
+Create a `with-apollo-client.js` file in `./lib` with the following contents
 
 ```javascript
 import React from 'react';
@@ -219,7 +219,7 @@ export default App => {
 };
 ```
 
-### Create a `_app.js` file in the `./pages` folder with the following contents
+Create a `_app.js` file in the `./pages` folder with the following contents
 
 ```javascript
 import App from 'next/app';
